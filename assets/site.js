@@ -2,6 +2,12 @@ const nav=document.querySelector('[data-nav]');
 const toggle=document.querySelector('[data-menu]');
 toggle?.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open))});
 const form=document.querySelector('[data-demo-form]');
+const query=new URLSearchParams(location.search);
+for(const key of ['service','industry']){
+  const select=form?.elements.namedItem(key);
+  const value=query.get(key);
+  if(select&&value&&[...select.options].some(option=>option.value===value))select.value=value;
+}
 form?.addEventListener('submit',event=>{
   event.preventDefault();
   if(!form.reportValidity())return;
