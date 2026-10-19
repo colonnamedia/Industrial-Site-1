@@ -1,4 +1,4 @@
-import {mkdir,copyFile,writeFile} from 'node:fs/promises';
+import {mkdir,copyFile,writeFile,readFile,readdir} from 'node:fs/promises';
 import {join} from 'node:path';
 
 const root=new URL('../',import.meta.url);
@@ -23,3 +23,14 @@ for(const [file,title,desc,path,body] of pages){const html=`<!doctype html><html
 await writeFile(new URL('./preview.html',out),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Forgepoint responsive review</title><style>*{box-sizing:border-box}body{margin:0;background:#10232b;color:white;font:14px/1.5 Arial,sans-serif}.bar{padding:15px 22px;display:flex;justify-content:space-between;gap:20px}a{color:#f2b74e}.frames{display:flex;gap:24px;align-items:start;padding:0 22px 40px;overflow:auto}.frame{flex:none}.desktop{width:1050px}.mobile{width:390px}.frame p{margin:0 0 7px}iframe{width:100%;height:800px;border:7px solid #405761;border-radius:13px;background:white}.mobile iframe{height:820px;border-radius:25px}</style></head><body><div class="bar"><strong>Forgepoint · responsive review</strong><a href="/">Open full site ↗</a></div><div class="frames"><div class="frame desktop"><p>Desktop · 1050 px</p><iframe title="Desktop industrial preview" src="/"></iframe></div><div class="frame mobile"><p>Mobile · 390 px</p><iframe title="Mobile industrial preview" src="/"></iframe></div></div></body></html>`);
 for(const asset of ['assets/styles.css','assets/site.js','assets/industrial-hero.webp','robots.txt'])await copyFile(new URL(`../${asset}`,import.meta.url),new URL(`./${asset}`,out));
 console.log(`Built ${pages.length} pages to dist/`);
+
+// Keep homepage photography in the generated build.
+const fwPhotos = await readFile(new URL('../homepage-photos.html', import.meta.url), 'utf8');
+const fwHomeUrl = new URL('./index.html', out);
+let fwHome = await readFile(fwHomeUrl, 'utf8');
+const fwHeading = fwHome.indexOf('<h2', fwHome.indexOf('<main'));
+const fwEnd = fwHome.indexOf('</section>', fwHeading) + '</section>'.length;
+await writeFile(fwHomeUrl, fwHome.slice(0, fwEnd) + fwPhotos + fwHome.slice(fwEnd));
+for (const file of await readdir(new URL('../assets/', import.meta.url))) {
+  if (file.startsWith('homepage-') && file.endsWith('.webp')) await copyFile(new URL('../assets/' + file, import.meta.url), new URL('./assets/' + file, out));
+}
