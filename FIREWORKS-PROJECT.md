@@ -30,3 +30,9 @@ Source build commit `92ef4ee1dd21ab61b1a93ef26a0577b59d984fc9`; mobile navigatio
 ## Homepage image audit — October 19, 2026
 
 Added three distinct supporting stock photographs to the homepage, with responsive layout, descriptive alt text, explicit dimensions, lazy loading and local optimized WebP assets. Existing hero imagery remains. Source and license references are in `PHOTO-SOURCES.md`. Standing rule: every homepage should contain four to five distinct, relevant photographs; repeated hero crops and logos do not count.
+
+## Homepage hero and photo pass — November 7, 2026
+
+The static build (`npm run build`, output `dist/`) now uses a shorter hero title and proposal preview CTA. The mobile hero gives the generated image a 320px image-first stage; the navigation control uses text rather than a symbol. The former generic three-photo row is replaced with fabrication and scope sections. The procurement confidence section uses a distinct workshop photo rather than repeating the hero. Four distinct local WebP photographs appear on the homepage. Supporting photos include alt text, actual dimensions and lazy loading, and every photo is labeled illustrative rather than actual staff, facilities or projects.
+
+`npm run check` passed for all six generated routes, links, metadata and the local-only form logic; `node --check assets/site.js` and `git diff --check` passed. Direct production routes, real 404, form/navigation interactions and desktop/mobile visual inspection remain required after deployment. No real safety, capability, project or credential claim may be inferred from this demo.
