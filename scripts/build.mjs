@@ -34,3 +34,6 @@ await writeFile(fwHomeUrl, fwHome.slice(0, fwEnd) + fwPhotos + fwHome.slice(fwEn
 for (const file of await readdir(new URL('../assets/', import.meta.url))) {
   if (file.startsWith('homepage-') && file.endsWith('.webp')) await copyFile(new URL('../assets/' + file, import.meta.url), new URL('./assets/' + file, out));
 }
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map(([path]) => `  <url><loc>https://industrial-site-1.vercel.app${path}</loc></url>`).join('\n')}\n</urlset>\n`;
+await writeFile(new URL('./sitemap.xml', out), sitemap);
